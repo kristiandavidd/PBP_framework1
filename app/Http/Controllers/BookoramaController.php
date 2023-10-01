@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use DeepCopy\f001\B;
 use Illuminate\Http\Request;
 
@@ -26,6 +27,7 @@ class BookoramaController extends Controller
      */
     public function create()
     {
+        
         return view('books.create');
     }
 
@@ -34,17 +36,33 @@ class BookoramaController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
+        // $request->validate([
+        //     'isbn' => 'required|regex:/^\d{1,}-\d{1,3}-\d{1,5}-\d{1,}$/',
+        //     'title' => 'required',
+        //     'categoryid' => 'required|exists:categories,id',
+        //     'author' => 'required',
+        //     'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+        // ]);
+    
+        $categoryName = $request->category;
+        $category = Category::where('name', $categoryName)->first();
+
+        if (!$category) {
+            return redirect()->back()->with('error', 'Kategori tidak valid');
+        }
+
         $book = new Book;
-        
         $book->isbn = $request->isbn;
         $book->title = $request->title;
         $book->author = $request->author;
         $book->price = $request->price;
-        $book->categoryid = $request->categoryid;
+
+        $book->category()->associate($category);
 
         $book->save();
-
         return redirect()->route('books.index');
+        
     }
 
     /**
@@ -60,16 +78,40 @@ class BookoramaController extends Controller
      */
     public function edit(Book $book)
     {
-        //
+        return view('books.edit', compact('book'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Book $book)
+    public function update(Request $request, $isbn)
     {
-        //
+        $categoryName = $request->category;
+        $category = Category::where('name', $categoryName)->first();
+
+        if (!$category) {
+            return redirect()->back()->with('error', 'Kategori tidak valid');
+        }
+
+        $book = Book::where('isbn', $isbn)->first();
+
+        if (!$book) {
+            return redirect()->route('books.index')->with('error', 'Buku tidak ditemukan');
+        }
+
+        $book->isbn = $request->isbn;
+        $book->title = $request->title;
+        $book->category()->associate($category);
+        $book->author = $request->author;
+        $book->price = $request->price;
+
+        
+
+        $book->save();
+
+        return redirect()->route('books.index')->with('success', 'Data buku berhasil diperbarui');
     }
+
 
     /**
      * Remove the specified resource from storage.

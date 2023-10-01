@@ -12,9 +12,11 @@ class Book extends Model
     
     protected $primaryKey = 'isbn';
     public $incrementing = false;
+    protected $fillable = ['isbn', 'title', 'author', 'price', 'categoryid'];
 
     public function category()
     {
+        
         return $this->belongsTo(Category::class, 'categoryid');
     }
 

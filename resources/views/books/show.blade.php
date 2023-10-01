@@ -29,6 +29,10 @@
                     <th>Penerbit</th>
                     <td>{{$book->penerbit}}</td>
                 </tr>
+                <tr>
+                    <th>Penerbit</th>
+                    <td>${{$book->price}}</td>
+                </tr>
             </table>
         </div>
     </div>

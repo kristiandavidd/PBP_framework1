@@ -23,15 +23,20 @@
                 <td>${{ $book->price }}</td>
                 <td>
                     <a class="m-2 btn btn-warning btn-sm" href="{{ route('books.edit', $book->isbn) }}">Edit</a>
-                    <form method="POST" action="{{ route('books.destroy', $book->isbn) }}" style="display: inline;">
+                    <!-- <a class="m-2 btn btn-danger btn-sm" href="{{ route('books.destroy', $book->isbn) }}">Delete</a> -->
+                    <form method="POST" action="{{ route('books.destroy', $book->isbn) }}" data-toggle="modal" data-target="#confirmDeleteModal{{ $book->id }}" style="display: inline;">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        
                     </form>
                 </td>
             </tr>
             @endforeach
         </table>
+        
+
     </div>
 </div>
+
 @endsection

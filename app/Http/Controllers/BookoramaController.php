@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use DeepCopy\f001\B;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class BookoramaController extends Controller
 {
@@ -116,8 +117,21 @@ class BookoramaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Book $book)
+    public function destroy($isbn)
     {
-        //
+        Log::info('Destroy method called for ISBN: ' . $isbn);
+        // Temukan buku berdasarkan ISBN
+        $book = Book::where('isbn', $isbn)->first();
+
+        // Periksa apakah buku ditemukan
+        if (!$book) {
+            return redirect()->route('books.index')->with('error', 'Buku tidak ditemukan');
+        }
+
+        // Hapus buku
+        $book->delete();
+
+        return redirect()->route('books.index')->with('success', 'Data buku berhasil dihapus');
     }
+    
 }

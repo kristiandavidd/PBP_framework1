@@ -21,7 +21,14 @@
                 <td>{{ $book->category->name }}</td>
                 <td>{{ $book->author }}</td>
                 <td>${{ $book->price }}</td>
-                <td><a class="m-2 btn btn-warning btn-sm" href="{{ route('books.edit', $book->isbn) }}">Edit</a><a class="btn btn-danger btn-sm" href="delete/{{$book->isbn}}">Delete</a></td>
+                <td>
+                    <a class="m-2 btn btn-warning btn-sm" href="{{ route('books.edit', $book->isbn) }}">Edit</a>
+                    <form method="POST" action="{{ route('books.destroy', $book->isbn) }}" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
             </tr>
             @endforeach
         </table>

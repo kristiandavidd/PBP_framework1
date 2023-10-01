@@ -38,6 +38,7 @@ Route::get('/dashboard', function () {
 
 // Route::post('/create', [BookoramaController::class, 'store'])->name('books.store');
 
+Route::delete('books/delete/{isbn}', 'BookoramaController@destroy')->name('books.destroy');
 Route::resource('books', BookoramaController::class);
 
 Route::middleware('auth')->group(function () {

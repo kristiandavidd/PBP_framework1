@@ -12,12 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('bookorama', function (Blueprint $table) {
-            $table->string('isbn')->unique();
+            $table->string('isbn')->primary();
             $table->string('title');
             $table->string('author');
             $table->float('price');
             $table->integer('categoryid')->unsigned();
-            $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             
 
@@ -31,4 +30,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('bookorama');
     }
+
 };
